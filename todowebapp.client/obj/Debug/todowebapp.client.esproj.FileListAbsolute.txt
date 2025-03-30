@@ -1,0 +1,1 @@
+D:\VSApp\ToDoWebApp\todowebapp.client\obj\Debug\todowebapp.client.esproj.CoreCompileInputs.cache
