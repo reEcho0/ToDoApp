@@ -1,30 +1,32 @@
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
+using ToDoWebApp.Server;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "todowebapp.client/build";
+});
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseSpaStaticFiles();
+app.UseRouting();
+app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSpa(spa =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapFallbackToFile("/index.html");
+    spa.Options.SourcePath = "todowebapp.client";
+    if (app.Environment.IsDevelopment())
+    {
+        spa.UseReactDevelopmentServer(npmScript: "start");
+    }
+});
 
 app.Run();

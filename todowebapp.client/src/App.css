@@ -1,15 +1,48 @@
-﻿#root {
-    max-width: 1280px;
+﻿.app-container {
+    max-width: 600px;
     margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+    padding: 20px;
 }
 
-body {
-    font-family: Arial, sans-serif; /* Эти шрифты поддерживают кириллицу */
+.task-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    .task-form input {
+        flex: 1;
+        padding: 8px;
+    }
+
+.task-list {
+    list-style: none;
+    padding: 0;
 }
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.filter-buttons {
+    margin: 20px 0;
+}
+
+    .filter-buttons button {
+        margin-right: 10px;
+        padding: 5px 10px;
+    }
+
+    .filter-buttons .active {
+        background-color: #007bff;
+        color: white;
+    }

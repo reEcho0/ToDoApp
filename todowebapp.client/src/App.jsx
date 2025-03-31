@@ -1,48 +1,37 @@
-import React, { /*useEffect,*/ useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import TaskList from './TaskList';
+import TaskForm from './TaskForm';
+import FilterButtons from './FilterButtons';
 import './App.css';
-import Note from "./Note";
 
 function App() {
-    const [notes, setNotes] = useState([]);
-    const [newNote, setNewNote] = useState({ title: "", text: "" });
+    const [tasks, setTasks] = useState([]);
+    const [filter, setFilter] = useState('all');
 
-    const addNote = () => {
-        if (newNote.title && newNote.text) {
-            const newID = Date.now().toString();//изменить создание ID
-            setNotes([...notes, { ...newNote, id: newID }]);
-            setNewNote({ title: "", text: "" });
-        }
+    useEffect(() => {
+        fetchTasks();
+    }, []);
+
+    const fetchTasks = async () => {
+        const response = await fetch('api/tasks');
+        const data = await response.json();
+        setTasks(data);
     };
 
-    const delteNote = (id) => {
-
-    };
-
-    const editNote = (id, newText) => {
-
-    };
+    const filteredTasks = tasks.filter(task => {
+        if (filter === 'completed') return task.completed;
+        if (filter === 'active') return !task.completed;
+        return true;
+    });
 
     return (
-        <div className="App">
-            <h1>App for notes</h1>
-            <div className="FormForNote">
-                <input
-                    type="text"
-                    placeholder="title"
-                    value={newNote.title}
-                    onChange={(e) => setNewNote({ ...newNote, title:e.target.value })}
-                />
-                <textarea
-                    rows="4"
-                    cols="50"
-                    placeholder="text"
-                    value={newNote.text}
-                    onChange={(e) => setNewNote({ ...newNote, text: e.target.value })}
-                />
-                <button onClick={addNote}>Add note</button>
-            </div>
+        <div className="app-container">
+            <h1>Task Manager</h1>
+            <TaskForm onTaskAdded={fetchTasks} />
+            <FilterButtons onFilterChange={setFilter} activeFilter={filter} />
+            <TaskList tasks={filteredTasks} onTaskUpdate={fetchTasks} />
         </div>
-    )
+    );
 }
 
 export default App;
